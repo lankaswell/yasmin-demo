@@ -26,10 +26,11 @@ def layout(filename,title,body):
  body=body.replace('href="#chi-sono"','href="chi-sono.html"')
  page=f'''<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Demo del sito di Yasmin Khreiwesh: musicoterapia, musica e lezioni di flauto traverso."><title>{title} · Yasmin Khreiwesh</title><link rel="icon" type="image/svg+xml" href="assets/mark.svg"><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script></head><body><a class="skip" href="#main">Vai al contenuto</a><div class="demo-bar">ANTEPRIMA DEL SITO · Testi e fotografie dimostrativi</div><header><div class="wrap"><a class="brand" href="index.html" aria-label="Yasmin Khreiwesh, homepage"><img src="assets/mark.svg" alt=""><div><span>Dott.ssa Yasmin Khreiwesh</span><small>Musicoterapia · Musica · Flauto</small></div></a><button class="menu" aria-expanded="false" aria-controls="navigation">Menu</button><nav id="navigation" aria-label="Navigazione principale">{links}</nav></div></header><main id="main">{body}</main><section class="contact"><div class="wrap"><div><div class="eyebrow">Un primo incontro</div><h2>Cominciamo dall’ascolto.</h2></div><div><p>Un percorso, una lezione o un progetto musicale: ogni incontro parte da ciò che stai cercando.</p><a class="button" href="contatti.html">Parliamone <span aria-hidden="true">→</span></a></div></div></section><footer><div class="wrap"><span>© Yasmin Khreiwesh · Demo 2026</span><span>Foto illustrative · Nessun dato raccolto · <a href="note-demo.html">Informazioni sulla demo</a></span></div></footer></body></html>'''
  page=page.replace('<header>','<header class="site-header">',1)
- page=page.replace('href="styles.css"','href="styles.css?v=3"').replace('src="app.js"','src="app.js?v=3"')
+ page=page.replace('href="styles.css"','href="styles.css?v=4"').replace('src="app.js"','src="app.js?v=4"')
  page=page.replace('>Menu</button>','>Menu <span aria-hidden="true">☰</span></button>',1)
- footer_links=''.join(f'<a href="{url}">{label}</a>' for url,label,_ in activities)
- page=page.replace('<footer><div class="wrap">',f'<footer><div class="wrap footer-links"><a href="index.html">Home</a><a href="chi-sono.html">Chi sono</a>{footer_links}<a href="corsi.html">Corsi online</a><a href="contatti.html">Contatti</a></div><div class="wrap">',1)
+ if filename!='index.html':
+  page=page.replace('<main id="main">','<main id="main" class="inner-page">')
+  page=re.sub(r'<img class="wide-photo"[^>]+><p class="caption">.*?</p>','',page)
  (S/filename).write_text(page,encoding='utf-8')
 def heading(label,title,lead):return f'<div class="wrap"><section class="page-hero"><div class="eyebrow">{label}</div><h1>{title}</h1><p class="lead">{lead}</p></section></div>'
 def block(title,copy):return f'<article class="editorial"><h3>{title}</h3><p>{copy}</p></article>'
