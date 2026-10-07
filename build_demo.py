@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 S=Path('site')
-nav=[('index.html','Home'),('index.html#chi-sono','Chi sono'),('corsi.html','Corsi online'),('contatti.html','Contatti')]
+nav=[('index.html','Home'),('chi-sono.html','Chi sono'),('musicoterapia.html','Musicoterapia'),('musicista.html','Musicista'),('flauto.html','Lezioni di flauto'),('corsi.html','Corsi online'),('contatti.html','Contatti')]
 activities=[('musicoterapia.html','Musicoterapia','Bambini, adolescenti e adulti'),('musicista.html','Musicista','Progetti e collaborazioni'),('flauto.html','Lezioni di flauto','In presenza e online')]
 sections={
  'musicoterapia.html':[('percorsi','Percorsi'),('studi','Dove ricevo'),('curriculum','Curriculum'),('testimonianze','Dicono di me')],
@@ -11,7 +11,6 @@ sections={
 }
 def layout(filename,title,body):
  links=''.join(f'<a href="{url}"'+(' aria-current="page"' if url==filename else '')+f'>{label}</a>' for url,label in nav)
- activity_links=''.join(f'<a href="{url}"'+(' aria-current="page"' if url==filename else '')+f'><strong>{label}</strong><span>{description}</span></a>' for url,label,description in activities)
  if filename in sections:
   page_sections=iter(sections[filename])
   def add_id(match):
@@ -19,21 +18,18 @@ def layout(filename,title,body):
    except StopIteration:return match.group(0)
    return f'<section class="section" id="{anchor}">'
   body=re.sub(r'<section class="section"(?: id="[^"]+")?>',add_id,body)
-  jump=''.join(f'<a href="#{anchor}">{label}</a>' for anchor,label in sections[filename])
-  body=body.replace('</section></div>',f'<nav class="page-index" aria-label="In questa pagina"><span>In questa pagina</span>{jump}</nav></section></div>',1)
  if filename!='index.html':
   body=f'<div class="wrap breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></div>'+body
   body=re.sub(r'<h1>(.*?)</h1>',lambda m:f'<h1 class="explicit-title">{title}</h1><p class="page-motto">{m.group(1)}</p>',body,count=1)
  else:
-  choices=''.join(f'<a href="{url}"><strong>{label}</strong><span>{description}</span><b aria-hidden="true">→</b></a>' for url,label,description in activities)
-  body=body.replace('<div class="actions">',f'<div class="hero-choices" aria-label="Scegli un’attività">{choices}</div><div class="actions">',1)
-  body=body.replace('Scopri i percorsi','Tutte le attività',1)
+  body=body.replace('Scopri i percorsi','Scegli un’attività',1)
+ body=body.replace('href="#chi-sono"','href="chi-sono.html"')
  page=f'''<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Demo del sito di Yasmin Khreiwesh: musicoterapia, musica e lezioni di flauto traverso."><title>{title} · Yasmin Khreiwesh</title><link rel="icon" type="image/svg+xml" href="assets/mark.svg"><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script></head><body><a class="skip" href="#main">Vai al contenuto</a><div class="demo-bar">ANTEPRIMA DEL SITO · Testi e fotografie dimostrativi</div><header><div class="wrap"><a class="brand" href="index.html" aria-label="Yasmin Khreiwesh, homepage"><img src="assets/mark.svg" alt=""><div><span>Dott.ssa Yasmin Khreiwesh</span><small>Musicoterapia · Musica · Flauto</small></div></a><button class="menu" aria-expanded="false" aria-controls="navigation">Menu</button><nav id="navigation" aria-label="Navigazione principale">{links}</nav></div></header><main id="main">{body}</main><section class="contact"><div class="wrap"><div><div class="eyebrow">Un primo incontro</div><h2>Cominciamo dall’ascolto.</h2></div><div><p>Un percorso, una lezione o un progetto musicale: ogni incontro parte da ciò che stai cercando.</p><a class="button" href="contatti.html">Parliamone <span aria-hidden="true">→</span></a></div></div></section><footer><div class="wrap"><span>© Yasmin Khreiwesh · Demo 2026</span><span>Foto illustrative · Nessun dato raccolto · <a href="note-demo.html">Informazioni sulla demo</a></span></div></footer></body></html>'''
  page=page.replace('<header>','<header class="site-header">',1)
+ page=page.replace('href="styles.css"','href="styles.css?v=3"').replace('src="app.js"','src="app.js?v=3"')
  page=page.replace('>Menu</button>','>Menu <span aria-hidden="true">☰</span></button>',1)
- page=page.replace('</nav></div></header>',f'</nav></div><nav class="activity-nav wrap" aria-label="Le tre attività">{activity_links}</nav></header>',1)
  footer_links=''.join(f'<a href="{url}">{label}</a>' for url,label,_ in activities)
- page=page.replace('<footer><div class="wrap">',f'<footer><div class="wrap footer-links"><a href="index.html">Home</a><a href="index.html#chi-sono">Chi sono</a>{footer_links}<a href="corsi.html">Corsi online</a><a href="contatti.html">Contatti</a></div><div class="wrap">',1)
+ page=page.replace('<footer><div class="wrap">',f'<footer><div class="wrap footer-links"><a href="index.html">Home</a><a href="chi-sono.html">Chi sono</a>{footer_links}<a href="corsi.html">Corsi online</a><a href="contatti.html">Contatti</a></div><div class="wrap">',1)
  (S/filename).write_text(page,encoding='utf-8')
 def heading(label,title,lead):return f'<div class="wrap"><section class="page-hero"><div class="eyebrow">{label}</div><h1>{title}</h1><p class="lead">{lead}</p></section></div>'
 def block(title,copy):return f'<article class="editorial"><h3>{title}</h3><p>{copy}</p></article>'
@@ -44,4 +40,5 @@ layout('flauto.html','Lezioni di flauto',heading('03 / Insegnamento','Il tuo tem
 layout('corsi.html','Corsi online',heading('Corsi online','Porta l’ascolto con te.','Uno spazio per i corsi da seguire a distanza. Nella prima versione presenteremo programmi e modalità; gli acquisti e l’area riservata arriveranno in una fase successiva.')+'''<div class="wrap"><section class="section"><div class="tag">In preparazione</div><h2 class="space">Musica e respirazione.</h2><p>Un corso sulla respirazione è tra i contenuti previsti da Yasmin. Programma, durata, materiali e destinatari sono ancora da definire.</p><div class="content-grid space">'''+block('Cosa troverai','Una presentazione chiara del programma, delle modalità di fruizione e dei materiali inclusi.')+block('Quando sarà disponibile','La data e le modalità di partecipazione saranno comunicate quando i contenuti saranno pronti.')+'''</div><a class="button" href="contatti.html">Chiedi informazioni <span aria-hidden="true">→</span></a><p class="notice space">La demo non prevede acquisti, pagamenti o account. Non sono pubblicati prezzi o date provvisori.</p></section></div>''')
 layout('contatti.html','Contatti',heading('Contatti','Raccontami cosa cerchi.','Un percorso di musicoterapia, una lezione di flauto o una collaborazione musicale: da qui potrai contattare Yasmin.')+'''<div class="wrap"><section class="section content-grid"><div><h2>Un primo passo.</h2><p>I recapiti e le sedi saranno inseriti dopo la conferma di Yasmin.</p><p class="notice">Questo è un modulo dimostrativo. Non invia messaggi e non salva i dati inseriti.</p><p class="small">Per provare la demo usa informazioni inventate.</p></div><form class="form-demo"><div><label for="name">Nome</label><input id="name" autocomplete="off" placeholder="Il tuo nome (di esempio)" required></div><div><label for="interest">Di cosa vorresti parlare?</label><textarea id="interest" rows="4" placeholder="Una lezione, un percorso, un progetto…" required></textarea></div><button class="button" type="submit">Prova il modulo <span aria-hidden="true">→</span></button><div class="form-message" role="status" hidden></div></form></section></div>''')
 layout('note-demo.html','Informazioni sulla demo',heading('Anteprima','Una proposta da esplorare.','Questa demo mostra struttura e direzione visiva del futuro sito di Yasmin.')+'''<div class="wrap"><section class="section"><h3>Contenuti provvisori</h3><p>Testi, fotografia e ricostruzione vettoriale del segno musicale sono dimostrativi. Prima del lancio saranno sostituiti o confermati insieme a Yasmin. Non sono presenti testimonianze, sedi o curriculum inventati.</p><h3>Tipografia</h3><p>Allura è utilizzato per la firma e i titoli brevi. Manrope è l’alternativa temporanea a Nourd, in attesa del font con licenza per il web.</p><h3>Dati e servizi</h3><p>Il modulo è locale e non invia o conserva dati. Non sono integrati analytics, video esterni, pagamenti o cookie del sito. Il servizio di hosting GitHub Pages può gestire dati tecnici secondo la propria informativa.</p><h3>Versione definitiva</h3><p>Recapiti, materiali originali, testi approvati e informazioni privacy saranno completati prima di attivare servizi di contatto o vendita.</p></section></div>''')
-print('Generated 7 demo pages')
+layout('chi-sono.html','Chi sono',heading('Yasmin Khreiwesh','La persona, prima delle note.','Musicoterapista, flautista e insegnante di flauto. Tre dimensioni di un lavoro che ruota intorno alla musica.')+'''<div class="wrap"><section class="section about-grid"><div class="about-art"><img src="assets/mark.svg" alt="Il segno musicale di Yasmin"><p class="script">Ogni persona ha<br>il proprio tempo.</p></div><div><h2>Il mio percorso.</h2><p>Questo spazio racconterà il percorso di Yasmin: la formazione, le esperienze e il modo in cui musica, relazione e insegnamento si incontrano nel suo lavoro.</p><p class="notice">La biografia e il curriculum saranno inseriti con i materiali forniti da Yasmin.</p><a class="text-link" href="musicoterapia.html#curriculum">Curriculum professionale →</a><br><a class="text-link" href="musicista.html#curriculum">Curriculum artistico →</a></div></section></div>''')
+print('Generated 8 demo pages')
