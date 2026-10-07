@@ -1,9 +1,39 @@
 from pathlib import Path
+import re
 S=Path('site')
-nav=[('musicoterapia.html','Musicoterapia'),('musicista.html','Musicista'),('flauto.html','Flauto'),('corsi.html','Corsi'),('contatti.html','Contatti')]
+nav=[('index.html','Home'),('index.html#chi-sono','Chi sono'),('corsi.html','Corsi online'),('contatti.html','Contatti')]
+activities=[('musicoterapia.html','Musicoterapia','Bambini, adolescenti e adulti'),('musicista.html','Musicista','Progetti e collaborazioni'),('flauto.html','Lezioni di flauto','In presenza e online')]
+sections={
+ 'musicoterapia.html':[('percorsi','Percorsi'),('studi','Dove ricevo'),('curriculum','Curriculum'),('testimonianze','Dicono di me')],
+ 'musicista.html':[('progetti','Progetti e collaborazioni'),('media','Foto e video'),('curriculum','Curriculum artistico')],
+ 'flauto.html':[('lezioni','Metodo e lezioni'),('faq','Domande frequenti'),('testimonianze','Dicono di me')],
+ 'corsi.html':[('corso','Musica e respirazione')],
+}
 def layout(filename,title,body):
  links=''.join(f'<a href="{url}"'+(' aria-current="page"' if url==filename else '')+f'>{label}</a>' for url,label in nav)
+ activity_links=''.join(f'<a href="{url}"'+(' aria-current="page"' if url==filename else '')+f'><strong>{label}</strong><span>{description}</span></a>' for url,label,description in activities)
+ if filename in sections:
+  page_sections=iter(sections[filename])
+  def add_id(match):
+   try: anchor,_=next(page_sections)
+   except StopIteration:return match.group(0)
+   return f'<section class="section" id="{anchor}">'
+  body=re.sub(r'<section class="section"(?: id="[^"]+")?>',add_id,body)
+  jump=''.join(f'<a href="#{anchor}">{label}</a>' for anchor,label in sections[filename])
+  body=body.replace('</section></div>',f'<nav class="page-index" aria-label="In questa pagina"><span>In questa pagina</span>{jump}</nav></section></div>',1)
+ if filename!='index.html':
+  body=f'<div class="wrap breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></div>'+body
+  body=re.sub(r'<h1>(.*?)</h1>',lambda m:f'<h1 class="explicit-title">{title}</h1><p class="page-motto">{m.group(1)}</p>',body,count=1)
+ else:
+  choices=''.join(f'<a href="{url}"><strong>{label}</strong><span>{description}</span><b aria-hidden="true">→</b></a>' for url,label,description in activities)
+  body=body.replace('<div class="actions">',f'<div class="hero-choices" aria-label="Scegli un’attività">{choices}</div><div class="actions">',1)
+  body=body.replace('Scopri i percorsi','Tutte le attività',1)
  page=f'''<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Demo del sito di Yasmin Khreiwesh: musicoterapia, musica e lezioni di flauto traverso."><title>{title} · Yasmin Khreiwesh</title><link rel="icon" type="image/svg+xml" href="assets/mark.svg"><link rel="stylesheet" href="styles.css"><script src="app.js" defer></script></head><body><a class="skip" href="#main">Vai al contenuto</a><div class="demo-bar">ANTEPRIMA DEL SITO · Testi e fotografie dimostrativi</div><header><div class="wrap"><a class="brand" href="index.html" aria-label="Yasmin Khreiwesh, homepage"><img src="assets/mark.svg" alt=""><div><span>Dott.ssa Yasmin Khreiwesh</span><small>Musicoterapia · Musica · Flauto</small></div></a><button class="menu" aria-expanded="false" aria-controls="navigation">Menu</button><nav id="navigation" aria-label="Navigazione principale">{links}</nav></div></header><main id="main">{body}</main><section class="contact"><div class="wrap"><div><div class="eyebrow">Un primo incontro</div><h2>Cominciamo dall’ascolto.</h2></div><div><p>Un percorso, una lezione o un progetto musicale: ogni incontro parte da ciò che stai cercando.</p><a class="button" href="contatti.html">Parliamone <span aria-hidden="true">→</span></a></div></div></section><footer><div class="wrap"><span>© Yasmin Khreiwesh · Demo 2026</span><span>Foto illustrative · Nessun dato raccolto · <a href="note-demo.html">Informazioni sulla demo</a></span></div></footer></body></html>'''
+ page=page.replace('<header>','<header class="site-header">',1)
+ page=page.replace('>Menu</button>','>Menu <span aria-hidden="true">☰</span></button>',1)
+ page=page.replace('</nav></div></header>',f'</nav></div><nav class="activity-nav wrap" aria-label="Le tre attività">{activity_links}</nav></header>',1)
+ footer_links=''.join(f'<a href="{url}">{label}</a>' for url,label,_ in activities)
+ page=page.replace('<footer><div class="wrap">',f'<footer><div class="wrap footer-links"><a href="index.html">Home</a><a href="index.html#chi-sono">Chi sono</a>{footer_links}<a href="corsi.html">Corsi online</a><a href="contatti.html">Contatti</a></div><div class="wrap">',1)
  (S/filename).write_text(page,encoding='utf-8')
 def heading(label,title,lead):return f'<div class="wrap"><section class="page-hero"><div class="eyebrow">{label}</div><h1>{title}</h1><p class="lead">{lead}</p></section></div>'
 def block(title,copy):return f'<article class="editorial"><h3>{title}</h3><p>{copy}</p></article>'
