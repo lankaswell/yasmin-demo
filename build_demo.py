@@ -2,7 +2,7 @@ from pathlib import Path
 from html import escape
 
 ROOT=Path('site')
-NAV=[('index.html','Home'),('chi-sono.html','Chi sono'),('musicoterapia.html','Musicoterapia'),('musicista.html','Musicista'),('flauto.html','Lezioni di flauto'),('corsi.html','Corsi online'),('contatti.html','Contatti')]
+NAV=[('chi-sono.html','Chi sono'),('corsi.html','Corsi online'),('contatti.html','Contatti')]
 def link(url,label,outline=False):
  return f'<a class="button{" secondary" if outline else ""}" href="{url}">{label}<span aria-hidden="true">→</span></a>'
 def section(id,title,content,kicker=''):
@@ -13,10 +13,15 @@ def pending(title,text):
  return f'<div class="pending"><span class="pending-label">Materiale da inserire</span><h3>{title}</h3><p>{text}</p></div>'
 def page(file,title,body,lead='',motto=''):
  menu=''.join(f'<a href="{u}"'+(' aria-current="page"' if file==u else '')+f'>{l}</a>' for u,l in NAV)
+ activities=[('musicoterapia.html','Musicoterapia'),('musicista.html','Musicista'),('flauto.html','Lezioni di flauto')]
+ sublinks=''.join(f'<a href="{u}"'+(' aria-current="page"' if file==u else '')+f'>{l}</a>' for u,l in activities)
+ group=f'<div class="activity-group"><button class="activity-toggle{" active" if file in dict(activities) else ""}" type="button" aria-expanded="false" aria-controls="activity-submenu">Attività <span aria-hidden="true">⌄</span></button><div id="activity-submenu" hidden>{sublinks}</div></div>'
+ menu=menu.replace('<a href="corsi.html"',group+'<a href="corsi.html"',1)
  if file!='index.html':
   body=f'<div class="page-shell"><div class="breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>{title}</span></div><section class="page-intro"><p class="eyebrow">{title}</p><h1>{motto or title}</h1><p class="intro-copy">{lead}</p></section>{body}</div>'
  cta='' if file=='contatti.html' else f'<section class="closing"><img src="assets/mark.svg" alt=""><h2>Ogni incontro comincia da qui.</h2><p>Per un percorso, una lezione o una collaborazione musicale.</p>{link("contatti.html","Contatta Yasmin")}</section>'
  html=f'''<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>{escape(title)} · Dott.ssa Yasmin Khreiwesh</title><meta name="description" content="Yasmin Khreiwesh: musicoterapia, progetti musicali e lezioni di flauto traverso. Demo del sito."><link rel="icon" type="image/svg+xml" href="assets/mark.svg"><link rel="stylesheet" href="styles.css?v=5"><script src="app.js?v=5" defer></script></head><body><a class="skip" href="#main">Vai al contenuto</a><div class="demo-bar">DEMO · Contenuti da completare con Yasmin · Fotografie illustrative</div><header class="site-header"><div class="header-inner"><a class="brand" href="index.html" aria-label="Yasmin Khreiwesh, homepage"><img src="assets/mark.svg" alt=""><span>Dott.ssa Yasmin Khreiwesh<small>Musicoterapista · Flautista · Insegnante di flauto</small></span></a><button class="menu" type="button" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">☰</span></button><nav id="navigation" aria-label="Navigazione principale">{menu}</nav></div></header><main id="main">{body}</main>{cta}<footer><p>© 2026 Dott.ssa Yasmin Khreiwesh</p><a href="note-demo.html">Informazioni sulla demo</a></footer></body></html>'''
+ html=html.replace('styles.css?v=5','styles.css?v=6').replace('app.js?v=5','app.js?v=6')
  (ROOT/file).write_text(html,encoding='utf-8')
 
 paths=[('01','musicoterapia.html','Musicoterapia','Percorsi per bambini,<br>adolescenti e adulti.'),('02','musicista.html','Musicista','Progetti, esecuzioni<br>e collaborazioni.'),('03','flauto.html','Lezioni di flauto','Imparare a suonare,<br>in presenza e online.')]
