@@ -16,6 +16,7 @@ document.querySelector('.form-demo')?.addEventListener('submit',e=>{e.preventDef
 // Content stays visible without JavaScript or animation support.
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 if(!reducedMotion.matches && 'IntersectionObserver' in window && 'animate' in Element.prototype){
+ const mobileReveal=window.matchMedia('(max-width: 800px)').matches;
  const animations=new Set();
  const observer=new IntersectionObserver(entries=>{
   for(const entry of entries){
@@ -23,15 +24,15 @@ if(!reducedMotion.matches && 'IntersectionObserver' in window && 'animate' in El
    observer.unobserve(entry.target);
    if(reducedMotion.matches)continue;
    const animation=entry.target.animate(
-    [{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'translateY(0)'}],
-    {duration:580,easing:'cubic-bezier(.22,1,.36,1)'}
+    [{opacity:0,transform:`translateY(${mobileReveal ? 42 : 18}px)`},{opacity:1,transform:'translateY(0)'}],
+    {duration:mobileReveal ? 900 : 580,easing:mobileReveal ? 'cubic-bezier(.25,.1,.25,1)' : 'cubic-bezier(.22,1,.36,1)'}
    );
    animations.add(animation);
    animation.finished.then(()=>animations.delete(animation),()=>animations.delete(animation));
   }
- },{threshold:0.01,rootMargin:'0px 0px -32px 0px'});
+ },{threshold:0.01,rootMargin:`0px 0px -${mobileReveal ? 96 : 32}px 0px`});
  document.querySelectorAll('.home-paths,.home-about,.home-course,.content-section,.closing').forEach(section=>{
-  if(section.getBoundingClientRect().top>=window.innerHeight-32)observer.observe(section);
+  if(section.getBoundingClientRect().top>=window.innerHeight-(mobileReveal ? 96 : 32))observer.observe(section);
  });
  reducedMotion.addEventListener('change',event=>{
   if(!event.matches)return;
