@@ -232,8 +232,9 @@ footer a { padding: 8px 0; }
 .hero-copy .hero-name { color: var(--paper); font: 104px/1.05 Allura, cursive; max-width: 780px; margin: 0 0 24px; text-wrap: balance; }
 .hero-copy > p.hero-tagline { font: 400 24px/1.5 Body, Arial, sans-serif; color: var(--paper); max-width: 480px; margin: 0 0 20px; }
 .hero-copy > p:not(.hero-tagline) { max-width: 440px; font-size: 16px; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-.hero-actions .button { min-height: 50px; margin: 0; background: var(--paper); color: var(--brown); border-color: var(--paper); }
+.hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; max-width: 440px; gap: 14px; margin-top: 32px; }
+.hero-actions .button { min-width: 0; width: 100%; max-width: 100%; min-height: 50px; margin: 0; line-height: 1.4; white-space: normal; justify-content: space-between; gap: 14px; background: var(--paper); color: var(--brown); border-color: var(--paper); }
+.hero-actions .button > span { flex-shrink: 0; }
 .hero-actions .button:hover { background: #f3eee5db; }
 .hero-actions .secondary { background: transparent; color: var(--paper); border-color: #f3eee599; }
 .hero-actions .secondary:hover { background: #f3eee51a; }
@@ -266,8 +267,8 @@ footer a { padding: 8px 0; }
   .home-page .activity-doors { width: calc(100% - 48px); margin-bottom: 56px; }
 }
 @media (max-width: 650px) {
-  .hero-actions .button:first-child { width: 100%; justify-content: space-between; }
-  .hero-actions .secondary { border: 0; padding: 0; min-height: 40px; }
+  .hero-actions { grid-template-columns: minmax(0, 1fr); max-width: 360px; }
+  .hero-actions .secondary { border: 1px solid #f3eee599; padding: 13px 20px; min-height: 50px; }
   .home-page .activity-doors { padding: 0; }
   .home-page .activity-door, .home-page .activity-door:first-child { padding: 24px 0; }
   .home-page .activity-door h2 { margin: 0 0 8px; }
