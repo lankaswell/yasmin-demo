@@ -11,10 +11,12 @@ def item(title,text):
  return f'<article class="text-item"><h3>{title}</h3><p>{text}</p></article>'
 def pending(title,text):
  return f'<div class="pending"><span class="pending-label">Materiale da inserire</span><h3>{title}</h3><p>{text}</p></div>'
-def photo(file,alt,caption='Fotografia illustrativa · Demo'):
- return f'<figure class="demo-photo"><img src="assets/{file}" alt="{escape(alt,quote=True)}" width="1536" height="1024" loading="lazy" decoding="async"><figcaption>{caption}</figcaption></figure>'
+def photo(file,alt,caption='',portrait=False):
+ return f'<figure class="demo-photo{" portrait-photo" if portrait else ""}"><img src="assets/{file}" alt="{escape(alt,quote=True)}" loading="lazy" decoding="async">{f"<figcaption>{caption}</figcaption>" if caption else ""}</figure>'
 
-FLUTE_PHOTO=photo('flute-score-demo.jpg','Flauto traverso argentato appoggiato su uno spartito, in un ambiente dai toni caldi')
+FLUTE_PHOTO=photo('yasmin-flauto-ponte.webp','Yasmin suona il flauto traverso su un ponte')
+PORTRAIT_PHOTO=photo('yasmin-ritratto.webp','Ritratto di Yasmin con il flauto traverso',portrait=True)
+PERFORMANCE_PHOTO=photo('yasmin-flauto-bosco.webp','Yasmin suona il flauto traverso all’aperto')
 ROOM_PHOTO=photo('music-room-demo.jpg','Ambiente illustrativo con due poltrone, un tamburo, uno xilofono e piccoli strumenti in legno','Ambiente illustrativo · Non è uno studio reale di Yasmin')
 
 def video_placeholder(file,title,description):
@@ -47,7 +49,7 @@ paths=[
 doors=''.join(f'<a class="activity-door" href="{u}"><span class="number">{n}</span><h3>{t}</h3><p>{d}</p><span class="door-link">{label} <b aria-hidden="true">→</b></span></a>' for n,u,t,d,label in paths)
 page('index.html','Home',f'''
 <section class="home-hero" aria-label="Benvenuti nel sito di Yasmin">
- <div class="hero-photo"><img src="assets/flute-hero.jpg" alt="Dettaglio illustrativo di mani su un flauto traverso" fetchpriority="high"></div>
+ <div class="hero-photo"><img src="assets/yasmin-flauto-hero.webp" alt="Yasmin suona il flauto traverso all’aperto" fetchpriority="high"></div>
  <div class="hero-copy">
   <h1 class="hero-name">Yasmin Khreiwesh</h1>
   <p class="hero-tagline">La musica, uno spazio di incontro.</p>
@@ -65,7 +67,7 @@ page('index.html','Home',f'''
  <div class="activity-doors">{doors}</div>
 </section>
 <section class="home-about" aria-labelledby="about-title">
- <div class="about-sign"><img src="assets/mark.svg" alt=""><p>Ogni persona ha<br>il proprio tempo.</p></div>
+ <div class="about-sign">{PORTRAIT_PHOTO}</div>
  <div class="about-copy"><p class="eyebrow">Chi sono</p><h2 id="about-title">Conosciamoci meglio.</h2>
   <p>Dietro ogni percorso c’è una persona. Nella pagina dedicata a me puoi conoscere la mia formazione, le esperienze e il modo in cui lavoro.</p>
   {link('chi-sono.html','Il mio percorso',True)}
@@ -77,12 +79,12 @@ page('index.html','Home',f'''
   <p>Scopri la proposta e le anteprime delle lezioni nella pagina dei corsi.</p>
   {link('corsi.html','Esplora i corsi online',True)}
  </div>
- {FLUTE_PHOTO}
+ {photo('yasmin-flauto-fiume.webp','Yasmin con il flauto traverso accanto al fiume')}
 </section>''')
 
 page('chi-sono.html','Chi sono',
  section('presentazione','Tre modi di vivere la musica.', '<div class="two-columns">'+item('Musicoterapia','La musica come esperienza di ascolto e relazione, nei percorsi rivolti a bambini, adolescenti e adulti.')+item('Musica e insegnamento','L’attività artistica e le lezioni di flauto traverso: il suono, la pratica e il piacere di condividere la musica.')+'</div>')+
- section('biografia','Il mio percorso.','<div class="two-columns photo-block">'+FLUTE_PHOTO+pending('Biografia e ritratto','Questo spazio accoglierà il racconto personale di Yasmin e una sua fotografia. Il dettaglio musicale accanto è un’immagine illustrativa per la demo.')+'</div>')+
+ section('biografia','Il mio percorso.','<div class="two-columns photo-block">'+PORTRAIT_PHOTO+pending('Biografia','Questo spazio accoglierà il racconto personale di Yasmin. Il ritratto accanto è una sua fotografia originale.')+'</div>')+
  section('formazione','Formazione ed esperienze.',pending('Curriculum di Yasmin','La formazione e le esperienze saranno inserite a partire dai curriculum originali. Nessuna qualifica aggiuntiva è stata attribuita nella demo.')+'<div class="inline-links"><a href="musicoterapia.html#curriculum">Area musicoterapia →</a><a href="musicista.html#curriculum">Area artistica →</a><a href="flauto.html#curriculum">Area didattica →</a></div>'),
  'Sono Yasmin Khreiwesh, musicoterapista, flautista e insegnante di flauto. Questo è il luogo in cui si incontrano le tre anime del mio lavoro.','La persona, prima delle note.')
 
@@ -95,7 +97,7 @@ page('musicoterapia.html','Musicoterapia',
  'Percorsi per bambini, adolescenti e adulti. Un primo incontro è il punto di partenza per conoscere la persona, la richiesta e le possibilità del lavoro insieme.','Uno spazio per ascoltarsi.')
 
 page('musicista.html','Musicista',
- section('media','La musica da vedere e ascoltare.','<div class="two-columns photo-block">'+FLUTE_PHOTO+pending('Foto e video delle esecuzioni','Una galleria dedicata a Yasmin: immagini delle esibizioni e video in cui suona. La fotografia illustrativa anticipa l’atmosfera della sezione; i materiali originali sono da inserire.')+'</div>')+
+ section('media','La musica da vedere e ascoltare.','<div class="two-columns photo-block">'+PERFORMANCE_PHOTO+pending('Video delle esecuzioni','Le fotografie di Yasmin sono ora presenti. I video delle esecuzioni saranno aggiunti quando disponibili.')+'</div><div class="artist-gallery" aria-label="Fotografie di Yasmin con il flauto">'+photo('yasmin-flauto-rosso.webp','Yasmin suona il flauto traverso, in abito rosso, vicino al fiume',portrait=True)+photo('yasmin-flauto-tempietto.webp','Yasmin con il flauto traverso accanto a un tempietto',portrait=True)+photo('yasmin-ponte-ritratto.webp','Yasmin con il flauto traverso su un ponte',portrait=True)+'</div>')+
  section('progetti','Progetti e incontri musicali.','<div class="two-columns">'+item('Progetti musicali','Ogni progetto avrà una presentazione, il repertorio e i musicisti coinvolti, insieme alle fotografie e ai video disponibili.')+item('Servizi e collaborazioni','Qui saranno descritte le proposte musicali di Yasmin e le possibilità di collaborazione con musicisti, associazioni e organizzatori.')+'</div>')+
  section('curriculum','Il curriculum artistico.',pending('Il percorso da musicista','Formazione, concerti e collaborazioni saranno raccontati attraverso il curriculum artistico originale.'))+
  section('collaborazioni','Hai un progetto musicale?','<p>Questo spazio è dedicato a chi desidera proporre un’esecuzione, un evento o una collaborazione.</p>'+link('contatti.html','Contatta Yasmin')),
@@ -120,5 +122,5 @@ page('contatti.html','Contatti',
  section('scrivi','Un primo contatto.','<div class="two-columns"><div><p>Per un percorso di musicoterapia, una lezione di flauto o una collaborazione artistica.</p>'+pending('Recapiti e sedi','Email, telefono, social e indirizzi saranno inseriti dopo la conferma di Yasmin.')+'<div class="contact-photo">'+ROOM_PHOTO+'</div>'+'</div><form class="form-demo"><p class="form-note">Modulo di prova: non invia né salva dati. Usa informazioni inventate.</p><label for="name">Il tuo nome</label><input id="name" placeholder="Nome di esempio" required autocomplete="off"><label for="interest">Di cosa vorresti parlare?</label><textarea id="interest" rows="4" placeholder="Un percorso, una lezione, un progetto…" required></textarea><button class="button" type="submit">Prova il modulo <span aria-hidden="true">→</span></button><p class="form-message" role="status" hidden></p></form></div>'),
  'Ogni richiesta ha il suo punto di partenza. Raccontami cosa stai cercando.','Cominciamo da un incontro.')
 
-page('note-demo.html','Informazioni sulla demo',section('info','Una proposta da completare.','<p>Il sito segue il brand book approvato di Yasmin. Testi, fotografie e segno musicale sono dimostrativi. I materiali originali, i recapiti e i curriculum saranno inseriti prima del lancio.</p><p>Allura è utilizzato per firma e titoli brevi. Manrope sostituisce temporaneamente Nourd, in attesa del font con licenza web.</p><p>Il modulo di prova non invia o salva dati. Non sono integrati analytics, cookie, video esterni, pagamenti o account. GitHub Pages può trattare dati tecnici secondo la propria informativa.</p>'),'Questa è una demo grafica e navigabile, con fotografie illustrative.','Informazioni sulla demo')
+page('note-demo.html','Informazioni sulla demo',section('info','Una proposta da completare.','<p>Il sito segue il brand book approvato di Yasmin. Le fotografie nelle sezioni dedicate al flauto sono originali; la fotografia dello studio è ancora illustrativa. I recapiti, i curriculum e i video saranno inseriti prima del lancio.</p><p>Allura è utilizzato per firma e titoli brevi. Manrope sostituisce temporaneamente Nourd, in attesa del font con licenza web.</p><p>Il modulo di prova non invia o salva dati. Non sono integrati analytics, cookie, video esterni, pagamenti o account. GitHub Pages può trattare dati tecnici secondo la propria informativa.</p>'),'Questa è una demo grafica e navigabile, da completare con i materiali definitivi.','Informazioni sulla demo')
 print('Rebuilt 8 pages from shared templates')
