@@ -366,6 +366,10 @@ html { overflow-x: clip; }
 .artist-gallery .demo-photo:nth-child(2) img { object-position: center 38%; }
 .artist-gallery .demo-photo:nth-child(3) img { object-position: center 55%; }
 .home-hero .hero-photo img { object-position: 62% center; }
+@media (min-width: 801px) {
+  .home-hero .hero-photo { top: 60px; }
+  .home-hero .hero-photo img { object-position: 62% top; transform-origin: center top; transform: translateX(5%) scale(1.10); }
+}
 @media (prefers-reduced-motion: reduce) { .demo-photo img { transition: none; } .demo-photo:hover img { transform: none; } }
 @media (max-width: 800px) {
   .home-paths { width: calc(100% - 48px); padding-top: 42px; margin-bottom: 70px; }
