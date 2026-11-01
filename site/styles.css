@@ -352,6 +352,17 @@ footer a { padding: 8px 0; }
 .home-paths .activity-door h3 { font: 500 23px/1.4 Body, Arial, sans-serif; margin: 14px 0 12px; }
 .home-paths .activity-door p { font-size: 14px; line-height: 1.85; }
 .home-paths .door-link { margin-top: auto; }
+.home-about, .home-course { scroll-margin-top: 24px; }
+/* Original portraits: quiet editorial crops and restrained motion. */
+html { overflow-x: clip; }
+.home-about .about-sign { padding: 0; background: transparent; overflow: hidden; }
+.home-about .about-sign .demo-photo img { width: 100%; max-width: none; height: auto; min-height: 0; aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
+.demo-photo { overflow: hidden; }
+.demo-photo img { transition: transform .7s ease, filter .7s ease; }
+.demo-photo:hover img { transform: scale(1.035); }
+.portrait-photo img { aspect-ratio: 4 / 5; object-position: center 35%; }
+#biografia .portrait-photo img { aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
+.artist-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 30px; }
 .performance-feature { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr); gap: 42px; align-items: center; }
 .performance-player { background: var(--brown); border-radius: 4px; overflow: hidden; aspect-ratio: 16 / 9; }
 .performance-player video { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -359,7 +370,15 @@ footer a { padding: 8px 0; }
 .performance-copy p { max-width: 390px; font-size: 14px; }
 .performance-copy .eyebrow { color: var(--rose); font-size: 10px; }
 .performance-copy .performance-note { font-size: 11px; margin-bottom: 0; }
-.home-about, .home-course { scroll-margin-top: 24px; }
+.artist-gallery .demo-photo img { width: 100%; height: 330px; aspect-ratio: auto; object-fit: cover; }
+.artist-gallery .demo-photo:nth-child(2) img { object-position: center 38%; }
+.artist-gallery .demo-photo:nth-child(3) img { object-position: center 55%; }
+.home-hero .hero-photo img { object-position: 62% center; }
+@media (min-width: 801px) {
+  .home-hero .hero-photo { top: 20px; }
+  .home-hero .hero-photo img { object-position: 62% top; transform-origin: center top; transform: translateX(8%) scale(1.16); }
+}
+@media (prefers-reduced-motion: reduce) { .demo-photo img { transition: none; } .demo-photo:hover img { transform: none; } }
 @media (max-width: 800px) {
   .home-paths { width: calc(100% - 48px); padding-top: 42px; margin-bottom: 70px; }
   .paths-intro h2 { font-size: 50px; }
@@ -368,6 +387,11 @@ footer a { padding: 8px 0; }
 @media (max-width: 650px) {
   .performance-feature { grid-template-columns: 1fr; gap: 22px; }
   .performance-copy h3 { font-size: 21px; }
+  .home-about .about-sign .demo-photo img { height: auto; min-height: 0; }
+  .artist-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .artist-gallery .demo-photo img { height: 235px; }
+  .artist-gallery .demo-photo:last-child { grid-column: 1 / -1; }
+  .home-hero .hero-photo img { object-position: 63% center; }
   .home-paths { width: calc(100% - 40px); padding-top: 36px; margin-bottom: 60px; }
   .paths-intro { margin-bottom: 30px; }
   .paths-intro h2 { font-size: 44px; margin-bottom: 16px; }
