@@ -205,9 +205,29 @@ footer a { padding: 8px 0; }
 .demo-photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 3px; }
 .demo-photo figcaption { font-size: 11px; line-height: 1.6; margin-top: 10px; }
 .photo-block { align-items: center; gap: 48px; }
+.biography-copy p, .biography-details p { font-size: 15px; line-height: 1.85; }
+.biography-copy p:last-child, .biography-details p:last-child { margin-bottom: 0; }
+.biography-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 50px; align-items: center; }
+.biography-details .portrait-photo img { aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
+.biography-quote { border-left: 2px solid var(--rose); padding-left: 24px; font-weight: 600; }
+.curriculum-note { margin-top: 28px; }
+.contact-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 50px; margin-top: 30px; }
+.contact-method + .contact-method { margin-top: 30px; }
+.contact-details h3 { font-size: 18px; margin-bottom: 7px; }
+.contact-details a { overflow-wrap: anywhere; text-underline-offset: 4px; }
+.contact-details a { display: inline-flex; align-items: center; gap: 10px; }
+.contact-icon { width: 21px; height: 21px; flex: 0 0 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; color: var(--rose); }
+.contact-method a { font-size: 17px; }
+.contact-social ul { list-style: none; margin: 0; padding: 0; }
+.contact-social li { padding: 12px 0; border-top: 1px solid var(--rule); }
+.contact-social li span { display: block; font-size: 11px; }
+.contact-social li a { font-size: 14px; }
 .photo-block > div > p:last-child { margin-bottom: 0; }
 @media (max-width: 650px) {
   .photo-block { gap: 24px; }
+  .contact-details { grid-template-columns: 1fr; gap: 34px; }
+  .biography-details { grid-template-columns: 1fr; gap: 24px; }
+  .biography-details .portrait-photo img { max-height: 460px; }
   .demo-photo figcaption { font-size: 10px; }
 }
 
@@ -356,19 +376,33 @@ footer a { padding: 8px 0; }
 /* Original portraits: quiet editorial crops and restrained motion. */
 html { overflow-x: clip; }
 .home-about .about-sign { padding: 0; background: transparent; overflow: hidden; }
-.home-about .about-sign .demo-photo img { width: 100%; max-width: none; height: min(520px, 46vw); min-height: 360px; aspect-ratio: auto; object-fit: cover; object-position: center 38%; }
+.home-about .about-sign .demo-photo img { width: 100%; max-width: none; height: auto; min-height: 0; aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
 .demo-photo { overflow: hidden; }
 .demo-photo img { transition: transform .7s ease, filter .7s ease; }
 .demo-photo:hover img { transform: scale(1.035); }
 .portrait-photo img { aspect-ratio: 4 / 5; object-position: center 35%; }
-.artist-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 30px; }
-.artist-gallery .demo-photo img { width: 100%; height: 330px; aspect-ratio: auto; object-fit: cover; }
-.artist-gallery .demo-photo:nth-child(2) img { object-position: center 38%; }
-.artist-gallery .demo-photo:nth-child(3) img { object-position: center 55%; }
+#biografia .portrait-photo img { aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
+.artist-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .86fr); gap: clamp(28px, 6vw, 76px); align-items: center; }
+.artist-story-reverse { grid-template-columns: minmax(0, .86fr) minmax(0, 1fr); }
+.artist-story-copy { max-width: 500px; }
+.artist-story-copy .text-item + .text-item { border-top: 1px solid var(--rule); margin-top: 30px; padding-top: 26px; }
+.artist-story .demo-photo { width: 100%; }
+.artist-story .demo-photo img { aspect-ratio: 4 / 5; height: min(520px, 50vw); object-fit: cover; }
+#progetti .artist-story .demo-photo img { object-position: center 38%; }
+#curriculum .artist-story .demo-photo img { object-position: center 55%; }
+#collaborazioni .artist-story .demo-photo img { object-position: center 42%; }
+#curriculum .artist-story .pending { max-width: 500px; }
+.performance-feature { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(240px, 1fr); gap: 42px; align-items: center; }
+.performance-player { background: var(--brown); border-radius: 4px; overflow: hidden; aspect-ratio: 16 / 9; }
+.performance-player video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.performance-copy h3 { font-size: 24px; margin-bottom: 14px; }
+.performance-copy p { max-width: 390px; font-size: 14px; }
+.performance-copy .eyebrow { color: var(--rose); font-size: 10px; }
+.performance-copy .performance-note { font-size: 11px; margin-bottom: 0; }
 .home-hero .hero-photo img { object-position: 62% center; }
 @media (min-width: 801px) {
-  .home-hero .hero-photo { top: 60px; }
-  .home-hero .hero-photo img { object-position: 62% top; transform-origin: center top; transform: translateX(5%) scale(1.10); }
+  .home-hero .hero-photo { top: 20px; }
+  .home-hero .hero-photo img { object-position: 62% top; transform-origin: center top; transform: translateX(8%) scale(1.16); }
 }
 @media (prefers-reduced-motion: reduce) { .demo-photo img { transition: none; } .demo-photo:hover img { transform: none; } }
 @media (max-width: 800px) {
@@ -377,10 +411,12 @@ html { overflow-x: clip; }
   .paths-intro > p:last-child { font-size: 16px; }
 }
 @media (max-width: 650px) {
-  .home-about .about-sign .demo-photo img { height: 380px; min-height: 0; }
-  .artist-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-  .artist-gallery .demo-photo img { height: 235px; }
-  .artist-gallery .demo-photo:last-child { grid-column: 1 / -1; }
+  .performance-feature { grid-template-columns: 1fr; gap: 22px; }
+  .performance-copy h3 { font-size: 21px; }
+  .home-about .about-sign .demo-photo img { height: auto; min-height: 0; }
+  .artist-story, .artist-story-reverse { grid-template-columns: 1fr; gap: 24px; }
+  .artist-story .demo-photo img { height: auto; max-height: 460px; aspect-ratio: 4 / 3; }
+  #curriculum .artist-story .demo-photo { order: 2; }
   .home-hero .hero-photo img { object-position: 63% center; }
   .home-paths { width: calc(100% - 40px); padding-top: 36px; margin-bottom: 60px; }
   .paths-intro { margin-bottom: 30px; }
