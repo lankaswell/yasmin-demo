@@ -13,6 +13,25 @@ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(toggle?.ge
 document.querySelector('.activity-group')?.addEventListener('focusout',e=>{if(!e.currentTarget.contains(e.relatedTarget))closeActivities()});
 document.querySelector('.form-demo')?.addEventListener('submit',e=>{e.preventDefault();const m=document.querySelector('.form-message');m.hidden=false;m.textContent='Questa è una demo: il messaggio non è stato inviato né salvato. Il modulo sarà collegato ai recapiti di Yasmin nella versione definitiva.';m.scrollIntoView({block:'nearest',behavior:'smooth'})});
 
+const cvModal=document.querySelector('.cv-modal');
+const cvOpen=document.querySelector('.cv-open');
+const cvClose=cvModal?.querySelector('.cv-close');
+const cvFrame=cvModal?.querySelector('iframe');
+cvOpen?.addEventListener('click',()=>{
+ if(!cvModal || !cvFrame)return;
+ cvFrame.src=cvFrame.dataset.src;
+ cvModal.showModal();
+ document.body.classList.add('cv-modal-open');
+ cvClose.focus();
+});
+cvClose?.addEventListener('click',()=>cvModal.close());
+cvModal?.addEventListener('click',e=>{if(e.target===cvModal)cvModal.close()});
+cvModal?.addEventListener('close',()=>{
+ document.body.classList.remove('cv-modal-open');
+ cvFrame.removeAttribute('src');
+ cvOpen.focus();
+});
+
 // Prepare off-screen content before observing it, so it never flashes before entering.
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 if(!reducedMotion.matches && 'IntersectionObserver' in window && 'animate' in Element.prototype){

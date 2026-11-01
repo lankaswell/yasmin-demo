@@ -25,8 +25,14 @@ const fs = require('fs');
       const image = page.locator(`img[src="assets/icon-${name}.svg"]`).first();
       if (!(await image.evaluate(img => img.complete && img.naturalWidth > 0))) throw Error(`Icon failed: ${name}`);
     }
+    await page.goto('http://localhost:8000/musicoterapia.html#curriculum');
+    await page.locator('.cv-open').click();
+    if (!(await page.locator('.cv-modal').evaluate(dialog => dialog.open))) throw Error('CV modal failed to open');
+    if (!(await page.locator('.cv-modal iframe').getAttribute('src') || '').includes('.pdf')) throw Error('CV PDF did not load');
+    await page.keyboard.press('Escape');
+    if (await page.locator('.cv-modal').evaluate(dialog => dialog.open)) throw Error('CV modal failed to close');
     if (errors.length) throw Error(errors.join('\n'));
-    console.log('PASS: 8 pages at desktop and mobile widths, internal links, contact icons, no overflow or JS errors');
+    console.log('PASS: 8 pages at desktop and mobile widths, links, icons, CV modal, no overflow or JS errors');
   } finally {
     await browser.close();
   }
