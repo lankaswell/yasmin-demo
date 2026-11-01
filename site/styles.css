@@ -211,6 +211,10 @@ footer a { padding: 8px 0; }
 .biography-details .portrait-photo img { aspect-ratio: 3 / 2; object-fit: contain; object-position: center; }
 .biography-quote { border-left: 2px solid var(--rose); padding-left: 24px; font-weight: 600; }
 .curriculum-note { margin-top: 28px; }
+.cv-viewer { margin-top: 38px; }
+.cv-viewer-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 18px; }
+.cv-viewer-heading h3 { margin: 0; }
+.cv-viewer iframe { display: block; width: 100%; height: 720px; border: 1px solid var(--rule); background: #f4f4f4; border-radius: 3px; }
 .contact-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 50px; margin-top: 30px; }
 .contact-method + .contact-method { margin-top: 30px; }
 .contact-details h3 { font-size: 18px; margin-bottom: 7px; }
@@ -226,6 +230,8 @@ footer a { padding: 8px 0; }
 @media (max-width: 650px) {
   .photo-block { gap: 24px; }
   .contact-details { grid-template-columns: 1fr; gap: 34px; }
+  .cv-viewer-heading { align-items: flex-start; flex-direction: column; }
+  .cv-viewer iframe { height: 560px; }
   .biography-details { grid-template-columns: 1fr; gap: 24px; }
   .biography-details .portrait-photo img { max-height: 460px; }
   .demo-photo figcaption { font-size: 10px; }
